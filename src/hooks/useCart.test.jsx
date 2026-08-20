@@ -1,6 +1,23 @@
+import React from 'react';
 import { act, renderHook } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { ToastProvider } from '../context/ToastContext';
 import { useCart } from './useCart';
+
+const createWrapper = () => {
+    const queryClient = new QueryClient({
+        defaultOptions: {
+            queries: { retry: false },
+        },
+    });
+
+    return ({ children }) => (
+        <QueryClientProvider client={queryClient}>
+            <ToastProvider>{children}</ToastProvider>
+        </QueryClientProvider>
+    );
+};
 
 const product = {
     id: 42,
@@ -25,7 +42,7 @@ describe('useCart', () => {
     });
 
     it('يدمج المنتج نفسه ويحترم حد المخزون', () => {
-        const { result } = renderHook(() => useCart());
+        const { result } = renderHook(() => useCart(), { wrapper: createWrapper() });
 
         act(() => result.current.addToCart({ ...product, quantity: 2 }));
         act(() => result.current.addToCart({ ...product, quantity: 2 }));
@@ -36,7 +53,7 @@ describe('useCart', () => {
     });
 
     it('لا يضيف منتجاً نافداً ويزيل السلة عند طلب البدء من جديد', () => {
-        const { result } = renderHook(() => useCart());
+        const { result } = renderHook(() => useCart(), { wrapper: createWrapper() });
 
         act(() => result.current.addToCart({ ...product, in_stock: false }));
         expect(result.current.cart).toEqual([]);
@@ -52,7 +69,7 @@ describe('useCart', () => {
     it('يتعافى بأمان من بيانات سلة تالفة في التخزين المحلي', () => {
         localStorage.setItem('alashab_cart', '{not-valid-json');
 
-        const { result } = renderHook(() => useCart());
+        const { result } = renderHook(() => useCart(), { wrapper: createWrapper() });
 
         expect(result.current.cart).toEqual([]);
         // بعد التعافي، يؤكد تأثير الحفظ اللاحق أن السلة الصالحة أصبحت فارغة.

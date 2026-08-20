@@ -2,44 +2,44 @@
 
 ## 1. الغرض وحدود هذا الدليل
 
-هذا الدليل يصف **كيف يستعاد ويشغّل المشروع بصورة صحيحة** من الحزمة الحالية. المرفقات تحتوي شفرة التطبيق ومجلد Evolution، لكنها لا تحتوي المشروع الجذري المكتمل لـ Laravel أو Vite. لذلك يبدأ العمل الصحيح باسترجاع الأصول الناقصة من المستودع أو النسخة المصدرية الأصلية، لا بمحاولة تشغيل المجلدات الحالية كأنها مشروع مستقل.
+هذا الدليل يصف **كيف يستعاد ويشغّل المشروع بصورة صحيحة** من الحزمة الحالية. بعد دفعة الملفات الثانية، أصبحت ملفات Laravel الأساسية المتاحة (`composer.json` و`bootstrap/` و`config/` وmigrations وseeders و`public/` و`tests/`) وملفات Vite (`package.json` و`vite.config.js` وملف قفل pnpm) ضمن المستودع. ما زالت بعض ملفات الجذر غير متاحة، وعلى رأسها `artisan` وملف PHPUnit و`composer.lock`، لذلك يظل تشغيل Laravel الخلفي مشروطًا باستعادتها أو اعتماد بدائلها من المصدر الأصلي.
 
-| متاح في الحزمة | غير متاح في الحزمة | الأثر التشغيلي |
+| متاح في الحزمة | ما يزال غير متاح | الأثر التشغيلي |
 |---|---|---|
-| متحكمات ونماذج وخدمات Laravel وRoutes وBlade | `artisan` و`composer.json` و`composer.lock` و`config/` وmigrations | لا يمكن تثبيت PHP dependencies أو تشغيل أوامر Artisan أو ترحيل قاعدة البيانات من هذه النسخة وحدها. |
-| مصدر React واختبارات Vitest | `package.json` وملف قفل الحزم وملف Vite config | لا يمكن تثبيت أو بناء الواجهة أو تنفيذ الاختبارات من هذه النسخة وحدها. |
+| متحكمات ونماذج وخدمات Laravel وRoutes وBlade و`composer.json` و`bootstrap/` و`config/` وmigrations وseeders وtests | `artisan` و`composer.lock` وملف PHPUnit | لا يمكن حسم تثبيت Composer أو تشغيل Artisan/PHPUnit من هذه النسخة وحدها. |
+| مصدر React واختبارات Vitest و`package.json` و`vite.config.js` و`pnpm-lock.yaml` | لا توجد نواقص لازمة لبناء الواجهة | اجتاز `pnpm test` و`pnpm build` في بيئة الفحص. |
 | Compose لخدمة Evolution وقالب `.env` | ملف Evolution `.env` ونسخة image موثقة/مقفلة | يجب اختيار نسخة معتمدة من Evolution وضبطها بقيم سرية خارج Git. |
 
 > **قاعدة القرار:** لا تخمّن إصدارات Laravel أو PHP أو Node أو حزم Composer/Node. استعد ملفات الاعتماد من المصدر الأصلي أو من نسخة نشر ناجحة، ثم افحص توافقها مع الشفرة الموجودة قبل البدء في بيئة مشتركة أو إنتاجية.
 
 ## 2. ترتيب الاستعادة المقترح
 
-ابدأ بإنشاء مشروع Laravel مطابق للنسخة المعتمدة أو استعادة جذر المشروع الأصلي، ثم انسخ المجلدات التي يحفظها هذا المستودع إلى مواقعها المقابلة. بعد ذلك أعد manifests وملفات التهيئة وmigrations من المصدر القانوني للمشروع. لا تستخدم `composer update` أو تثبيت نسخ عشوائية لاستبدال ملف القفل المفقود؛ ذلك قد ينتج توافقًا ظاهريًا فقط ويغير السلوك الأمني والتشغيلي.
+ابدأ باستعادة `artisan` و`composer.lock` وملف PHPUnit من جذر Laravel الأصلي أو من artifact نشر ناجح، ثم ثبّت اعتماديات Composer وفق ملف القفل المعتمد. ملفات التهيئة وmigrations والواجهة أصبحت موجودة في المستودع. لا تستخدم `composer update` أو تثبيت نسخ عشوائية لاستبدال ملف القفل المفقود؛ ذلك قد ينتج توافقًا ظاهريًا فقط ويغير السلوك الأمني والتشغيلي.
 
 | المرحلة | الإجراء | معيار الاكتمال |
 |---|---|---|
-| 1. استعادة الجذر | استعادة `composer.json` و`composer.lock` و`artisan` وملفات Laravel الجذرية، ثم `package.json` وملف قفل Node وVite config. | يمكن لأوامر Composer وArtisan وNode التعرف إلى المشروع. |
-| 2. استعادة البيانات | استعادة migrations وseeders ومخطط Media Library وطريقة إنشاء المستخدم/المتجر. | قاعدة التطوير تبنى نظيفًا ويظهر تاجر له `store_slug`. |
+| 1. استعادة الجذر | استعادة `artisan` و`composer.lock` وملف PHPUnit من المصدر الأصلي، مع مراجعة توافقها مع [`composer.json`](../composer.json). | يمكن لأوامر Composer وArtisan والتكوين اختراق دورة bootstrap بنجاح. |
+| 2. تهيئة البيانات | استخدام migrations وseeders المرفوعة ومراجعة مخطط Media Library وطريقة إنشاء المستخدم/المتجر. | قاعدة التطوير تبنى نظيفًا ويظهر تاجر له `store_slug`. |
 | 3. تهيئة Laravel | إنشاء `.env` من [`.env.example`](../.env.example) ثم ضبط قاعدة البيانات والطوابير والبث والتكاملات. | ينجح `config:clear` و`config:cache` في البيئة المستهدفة. |
-| 4. تهيئة الواجهة | إضافة متغيرات `VITE_*` إلى ملف البيئة الخاص بالبناء وربط أصل API بمتجر اختبار. | تنجح طلبات متجر الاختبار إلى `/api/stores/{slug}`. |
+| 4. تهيئة الواجهة | تنفيذ `pnpm install --frozen-lockfile` ثم إضافة متغيرات `VITE_*` وربط أصل API بمتجر اختبار. | تنجح اختبارات الواجهة والبناء وطلبات متجر الاختبار. |
 | 5. تشغيل العمليات | تشغيل HTTP وqueue worker وReverb/خدمة البث وفق النسخة المستعادة. | تصل رسالة اختبار إلى الصندوق وتظهر في القناة الخاصة للتاجر. |
 | 6. ربط Evolution | إنشاء `evolution/.env` من القالب وتشغيل الخدمات وربط QR عبر لوحة التاجر. | حالة instance تصبح `open` ويصل Webhook محمي إلى Laravel. |
 
 ## 3. اعتماديات يجب تثبيتها بعد استعادة manifests
 
-تكشف imports الحالية عن الاعتمادات الوظيفية أدناه، لكن النسخ الدقيقة يجب أن تأتي من `composer.lock` وملف قفل Node الأصليين. عدم إدراج نسخة في هذا الجدول مقصود؛ لا توجد معلومة مصدرية موثوقة عنها في المرفقات.
+يكشف [`composer.json`](../composer.json) عن قيود اعتماديات PHP، لكنه لا يغني عن `composer.lock` المعتمد الذي ما زال غير متاح. في المقابل، استُعيدت اعتماديات الواجهة من imports الفعلية في المصدر وثُبتت في [`pnpm-lock.yaml`](../pnpm-lock.yaml) بعد اجتياز الاختبارات والبناء. ينبغي مراجعة نسخ PHP النهائية عند استعادة ملف قفل Composer، لا استبدالها بتخمينات.
 
 | المجال | الاعتماد المستنتج من الشفرة | الموضع الدال |
 |---|---|---|
 | PHP/Laravel | Laravel framework، Sanctum، Queue، Broadcasting، HTTP Client، Soft Deletes | [`app/`](../app/) و[`routes/api.php`](../routes/api.php) |
 | وسائط PHP | `spatie/laravel-medialibrary` | [`Product`](../app/Models/Product.php) و[`Message`](../app/Models/Message.php) |
-| الواجهة | React، React DOM، TanStack React Query، Axios، Lucide React | [`src/main.jsx`](../src/main.jsx)، [`src/services/api.js`](../src/services/api.js)، [`src/pages/Storefront.jsx`](../src/pages/Storefront.jsx) |
+| الواجهة | React، React DOM، TanStack React Query، Axios، Lucide React، Framer Motion، React Router | [`package.json`](../package.json) و[`src/`](../src/) |
 | البث في المتصفح | Laravel Echo وPusher JS، متوافق مع Reverb | [`src/services/echo.js`](../src/services/echo.js) |
-| الاختبارات | Vitest وTesting Library و`jest-dom` | [`src/test/setup.js`](../src/test/setup.js) والاختبارات المرفقة |
+| الاختبارات | Vitest وTesting Library و`jest-dom` وJSDOM | [`src/test/setup.js`](../src/test/setup.js) و[`vite.config.js`](../vite.config.js) والاختبارات المرفقة |
 
 ## 4. ملفات التهيئة التي يجب أن توجد في Laravel
 
-تستدعي الشفرة مفاتيح `merchant_integrations.*` و`model-activity.*`. لم يأت مجلد `config/` مع المرفقات، ولذلك يلزم استعادته أو إنشاء ملفات تكافئ العقود التالية قبل البدء. لا تعتبر [`.env.example`](../.env.example) بديلًا عن ملفات Laravel config؛ هو فقط مصدر قيم البيئة.
+تستدعي الشفرة مفاتيح `merchant_integrations.*` و`model-activity.*`، وقد استُعيدت ملفات التهيئة المقابلة داخل [`config/`](../config/). لا تعتبر [`.env.example`](../.env.example) بديلًا عن ملفات Laravel config؛ هو فقط مصدر قيم البيئة. راجع القيم وتوافقها عند استعادة `artisan` وملف قفل Composer قبل أي نشر.
 
 | ملف/قسم متوقع | المفاتيح التي تستخدمها الشفرة | الاستهلاك |
 |---|---|---|

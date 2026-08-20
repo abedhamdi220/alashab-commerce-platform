@@ -12,6 +12,7 @@ vendor/
 # Frontend dependencies and build outputs
 node_modules/
 dist/
+public/build/
 coverage/
 .vite/
 
@@ -32,3 +33,10 @@ evolution/instances/
 public/uploads/
 public/media/
 *.log
+
+# Exclude local SQLite runtime state; migrations are versioned instead.
+database/*.sqlite
+
+# Generated Laravel cache files
+bootstrap/cache/*.php
+!bootstrap/cache/.gitignore

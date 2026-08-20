@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">رَوَاء</title>
+  <desc id="desc">علامة نباتية هندسية تمثل النمو والعناية.</desc>
+  <defs>
+    <linearGradient id="forest" x1="22" y1="15" x2="107" y2="115" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2A7252"/>
+      <stop offset="1" stop-color="#123B2D"/>
+    </linearGradient>
+    <linearGradient id="leaf" x1="52" y1="31" x2="94" y2="83" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EDE7D8"/>
+      <stop offset="1" stop-color="#BBD1AF"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="34" fill="url(#forest)"/>
+  <path d="M38 89c0-30 18-48 47-51-2 30-18 48-47 51Z" fill="url(#leaf)"/>
+  <path d="M43 88c12-15 24-27 39-40" stroke="#1F5A43" stroke-width="6" stroke-linecap="round"/>
+  <path d="M42 91h47" stroke="#BC8754" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="94" cy="87" r="7" fill="#BC8754"/>
+</svg>
