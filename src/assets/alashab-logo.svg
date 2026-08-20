@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 112" role="img" aria-labelledby="title desc">
+  <title id="title">العشاب</title>
+  <desc id="desc">شعار العشاب، ورقة نبات داخل قوس دائري بألوان أخضر طبيعي ونحاسي دافئ</desc>
+  <defs>
+    <linearGradient id="leaf" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#0f4434"/>
+      <stop offset="1" stop-color="#6e856b"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(12 8)">
+    <circle cx="48" cy="48" r="43" fill="#e1ece3"/>
+    <path d="M18 70c9-25 24-42 45-50 5-2 10-3 15-3-1 25-12 45-34 55-10 5-19 5-26 2Z" fill="url(#leaf)"/>
+    <path d="M22 76c14-18 30-34 53-51" fill="none" stroke="#fcfcf8" stroke-width="3" stroke-linecap="round" opacity=".8"/>
+    <path d="M14 82c12 7 27 10 42 8 20-3 35-15 43-35" fill="none" stroke="#c87b46" stroke-width="5" stroke-linecap="round"/>
+    <path d="M47 90c-11 0-22-3-31-8" fill="none" stroke="#145542" stroke-width="3" stroke-linecap="round" opacity=".45"/>
+  </g>
+  <g direction="rtl" text-anchor="start">
+    <text x="405" y="62" fill="#145542" font-family="Cairo, IBM Plex Sans Arabic, sans-serif" font-size="42" font-weight="900">العشاب</text>
+    <text x="405" y="87" fill="#69736c" font-family="IBM Plex Sans Arabic, sans-serif" font-size="13" font-weight="500">عناية يومية بوعي</text>
+  </g>
+</svg>

@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+@theme {
+  --font-ibm: "IBM Plex Sans Arabic", sans-serif;
+  --font-cairo: "Cairo", sans-serif;
+  --font-readex: "Readex Pro", sans-serif;
+}
+
+@layer base {
+  :root {
+    --color-bg: #fcfcf8;
+    --color-surface: #f2f4ea;
+    --color-surface-deep: #e7ebdc;
+    --color-paper: #ffffff;
+    --color-ink: #163f35;
+    --color-ink-soft: #69736c;
+    --color-primary: #145542;
+    --color-primary-dark: #0f4434;
+    --color-primary-soft: #e1ece3;
+    --color-energy: #c87b46;
+    --color-trust: #6e856b;
+    --color-line: #dfe4d8;
+
+    --accent-slim: #819d76;
+    --accent-gain: #c58a55;
+    --accent-beauty: #b9828a;
+    --accent-skincare: #7f9a90;
+    --accent-intimate: #8d7b9f;
+
+    --gradient-signature: linear-gradient(135deg, #f3f5ec 0%, #e3eadc 100%);
+    --radius-sm: 12px;
+    --radius-md: 18px;
+    --radius-lg: 26px;
+    --radius-xl: 34px;
+    --radius-full: 999px;
+    --shadow-sm: 0 8px 22px rgba(28, 61, 49, 0.08);
+    --shadow-soft: 0 16px 42px rgba(28, 61, 49, 0.11);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html {
+    direction: rtl;
+    min-width: 320px;
+    scroll-behavior: smooth;
+    background: var(--color-bg);
+  }
+
+  body {
+    @apply bg-[var(--color-bg)] text-[var(--color-ink)] font-ibm;
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #root { min-height: 100vh; }
+  button, input, textarea, select { font: inherit; }
+  button { -webkit-tap-highlight-color: transparent; }
+  h1, h2, h3, h4, .font-cairo { font-family: 'Cairo', sans-serif; }
+  .font-readex { font-family: 'Readex Pro', sans-serif; }
+  ::selection { background: var(--color-primary); color: white; }
+}
+
+@layer utilities {
+  .page-enter { animation: fadeUp 420ms ease-out forwards; }
+  .wellness-shell { background: radial-gradient(circle at 87% 0%, rgba(198, 213, 190, .45), transparent 28%), var(--color-bg); }
+  .wellness-container { width: min(100% - 2rem, 1240px); margin-inline: auto; }
+  .wellness-kicker { color: var(--color-trust); font-size: .78rem; font-weight: 700; letter-spacing: .04em; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .page-enter { animation: none; opacity: 1; transform: none; }
+  }
+}

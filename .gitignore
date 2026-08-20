@@ -1,0 +1,34 @@
+# Laravel runtime and secrets
+.env
+.env.*
+!.env.example
+/storage/*.key
+/storage/logs/
+storage/framework/
+bootstrap/cache/
+public/storage
+vendor/
+
+# Frontend dependencies and build outputs
+node_modules/
+dist/
+coverage/
+.vite/
+
+# Editor and operating-system files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Local Evolution API state and generated QR/session files
+evolution/.env
+evolution/data/
+evolution/instances/
+
+# Uploaded media and temporary files
+public/uploads/
+public/media/
+*.log
