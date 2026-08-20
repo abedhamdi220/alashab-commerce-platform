@@ -28,7 +28,7 @@ flowchart LR
     M[WhatsApp / Messenger] --> H[Webhooks محمية]
     H --> Q[Queue Job]
     Q --> D
-    Q --> B[بث لحظي إلى merchant.{id}]
+    Q --> B["بث لحظي إلى merchant.{id}"]
     P <-->|صندوق رسائل| B
     P --> E[Evolution API]
 ```
